@@ -1,9 +1,10 @@
 from django.shortcuts import render
-from django.http import JsonResponse
+from django.http import JsonResponse, HttpResponse
 import openmeteo_requests
 import requests
 import requests_cache
 from retry_requests import retry
+from urllib.parse import quote, unquote
 
 
 def get_city_suggestions(request):
@@ -55,6 +56,7 @@ def get_weather_description(weather_code: int) -> str:
 
 def index(request):
     text = ''
+    previous_city = unquote(request.COOKIES.get('previous_city', ''))
 
     if request.method == 'POST':
         text = request.POST.get('txt', None)
@@ -93,12 +95,15 @@ def index(request):
             max_t = response.Daily().Variables(0).ValuesAsNumpy()[0]
             min_t = response.Daily().Variables(1).ValuesAsNumpy()[0]
 
-            return render(request, 'main/index.html', {
+            weather_response = render(request, 'main/index.html', {
                 'city': f'{geo_json["name"]}, {geo_json["country"]}',
                 'current_t': round(response_current_t),
                 'max_today': round(max_t),
                 'min_today': round(min_t),
                 'description': current_weather,
+                'previous_city': previous_city,
             })
+            weather_response.set_cookie('previous_city', quote(f'{geo_json["name"]}, {geo_json["country"]}'))
+            return weather_response
 
-    return render(request, 'main/index.html')
+    return render(request, 'main/index.html', {'previous_city': previous_city})

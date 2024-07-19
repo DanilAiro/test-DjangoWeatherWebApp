@@ -44,6 +44,16 @@
                     </form>
                     <div id="suggestions" class="suggestions"></div>
                 </div>
+                {% if previous_city and city != previous_city %}
+                <div class="alert alert-info">
+                    Вы ранее искали погоду в городе {{ previous_city }}.
+                    <form method="post" action="{% url 'home' %}">
+                        {% csrf_token %}
+                        <input type="hidden" name="txt" value="{{ previous_city }}">
+                        <button type="submit" class="btn btn-link p-0">Хотите узнать погоду снова?</button>
+                    </form>
+                </div>
+                {% endif %}
                 <div class="card shadow-0 border">
                     <div class="card-body p-4">
                         <h4 class="mb-1 sfw-normal">{{city}}</h4>
