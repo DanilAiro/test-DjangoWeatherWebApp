@@ -1,8 +1,25 @@
 from django.shortcuts import render
+from django.http import JsonResponse
 import openmeteo_requests
 import requests
 import requests_cache
 from retry_requests import retry
+
+
+def get_city_suggestions(request):
+    query = request.GET.get('q', '')
+    if query:
+        url = f"https://geocoding-api.open-meteo.com/v1/search"
+        params = {
+            "name": query,
+            "count": 5,
+            "language": "ru",
+            "format": "json",
+        }
+        response = requests.get(url, params=params)
+        suggestions = [f'{result["name"]}, {result["country"]}' for result in response.json().get('results', [])]
+        return JsonResponse(suggestions, safe=False)
+    return JsonResponse([], safe=False)
 
 
 def get_weather_description(weather_code: int) -> str:
