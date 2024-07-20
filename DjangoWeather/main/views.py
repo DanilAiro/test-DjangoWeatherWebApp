@@ -1,26 +1,27 @@
 from django.shortcuts import render
 from django.http import JsonResponse
+import json
 import openmeteo_requests
 import requests
 import requests_cache
-import json
 from retry_requests import retry
 from urllib.parse import quote, unquote
 
 
 def get_city_suggestions(request):
-    query = request.GET.get('q', '')
-    if query:
-        url = f"https://geocoding-api.open-meteo.com/v1/search"
-        params = {
-            "name": query,
-            "count": 5,
-            "language": "ru",
-            "format": "json",
-        }
-        response = requests.get(url, params=params)
-        suggestions = [f'{result["name"]}, {result["country"]}' for result in response.json().get('results', [])]
-        return JsonResponse(suggestions, safe=False)
+    if request:
+        query = request.GET.get('q', '')
+        if query:
+            url = f"https://geocoding-api.open-meteo.com/v1/search"
+            params = {
+                "name": query,
+                "count": 5,
+                "language": "ru",
+                "format": "json",
+            }
+            response = requests.get(url, params=params)
+            suggestions = [f'{result["name"]}, {result["country"]}' for result in response.json().get('results', [])]
+            return JsonResponse(suggestions, safe=False)
     return JsonResponse([], safe=False)
 
 
@@ -97,7 +98,7 @@ def index(request):
             max_t = response.Daily().Variables(0).ValuesAsNumpy()[0]
             min_t = response.Daily().Variables(1).ValuesAsNumpy()[0]
 
-            search_history.append(previous_city)
+            search_history.append(f'{geo_json["name"]}, {geo_json["country"]}')
             if len(search_history) > 3:
                 search_history.pop(0)
 
