@@ -15,6 +15,7 @@
 * Есть возможность запускать сразу в Docker
 
 ![Интерфейс сайта](Pogodka.png)
+
 *Интерфейс сайта*
 
 Чтобы скачать проект
@@ -36,7 +37,12 @@ pip install -r requirements.txt
 python manage.py runserver
 ```
 
-Для запуска тестов
+Для запуска тестов функций
 ```bash
-pytest
+pytest main/tests/test_views.py
+```
+
+Для запуска тестов интерфейса
+```bash
+pytest main/tests/test_ui.py
 ```
