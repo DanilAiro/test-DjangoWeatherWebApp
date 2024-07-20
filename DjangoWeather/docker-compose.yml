@@ -3,7 +3,7 @@ version: '3.8'
 services:
   web:
     build: .
-    command: gunicorn DjangoWeather.wsgi:application --bind 0.0.0.0:8000
+    command: gunicorn --timeout 120 --workers 3 --threads 2 DjangoWeather.wsgi:application --bind 0.0.0.0:8000
     volumes:
       - .:/app
       - ./static:/app/static
