@@ -115,4 +115,5 @@ def index(request):
             weather_response.set_cookie('search_history', json.dumps(search_history))
             return weather_response
 
-    return render(request, 'main/index.html', {'previous_city': previous_city, 'search_history': search_history})
+    return render(request, 'main/index.html', {'previous_city': previous_city,
+                                               'search_history': search_history})
