@@ -1,4 +1,4 @@
-Django>=3.2,<4.0
+Django
 gunicorn
 requests
 requests-cache
@@ -6,4 +6,4 @@ retry-requests
 selenium
 pytest
 pytest-django
-pyyaml==5.4.1
+pyyaml
