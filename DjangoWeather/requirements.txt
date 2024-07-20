@@ -7,3 +7,6 @@ selenium
 pytest
 pytest-django
 pyyaml
+numpy
+openmeteo-requests
+chromedriver
