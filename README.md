@@ -48,5 +48,4 @@ pytest main/tests/test_views.py
 pytest main/tests/test_ui.py
 ```
 
-Сайт доступен по ссылке
-[localhost:8000](localhost:8000)
+Сайт доступен по ссылке http://localhost:8000
