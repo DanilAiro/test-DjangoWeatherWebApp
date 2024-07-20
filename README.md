@@ -47,3 +47,6 @@ pytest main/tests/test_views.py
 ```bash
 pytest main/tests/test_ui.py
 ```
+
+Сайт доступен по ссылке
+[localhost:8000](localhost:8000)
