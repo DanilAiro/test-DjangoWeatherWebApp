@@ -3,6 +3,7 @@ from django.http import JsonResponse
 import openmeteo_requests
 import requests
 import requests_cache
+import json
 from retry_requests import retry
 from urllib.parse import quote, unquote
 
@@ -57,6 +58,7 @@ def get_weather_description(weather_code: int) -> str:
 def index(request):
     text = ''
     previous_city = unquote(request.COOKIES.get('previous_city', ''))
+    search_history = json.loads(request.COOKIES.get('search_history', '[]'))
 
     if request.method == 'POST':
         text = request.POST.get('txt', None)
@@ -95,6 +97,10 @@ def index(request):
             max_t = response.Daily().Variables(0).ValuesAsNumpy()[0]
             min_t = response.Daily().Variables(1).ValuesAsNumpy()[0]
 
+            search_history.append(previous_city)
+            if len(search_history) > 3:
+                search_history.pop(0)
+
             weather_response = render(request, 'main/index.html', {
                 'city': f'{geo_json["name"]}, {geo_json["country"]}',
                 'current_t': round(response_current_t),
@@ -102,8 +108,10 @@ def index(request):
                 'min_today': round(min_t),
                 'description': current_weather,
                 'previous_city': previous_city,
+                'search_history': search_history,
             })
             weather_response.set_cookie('previous_city', quote(f'{geo_json["name"]}, {geo_json["country"]}'))
+            weather_response.set_cookie('search_history', json.dumps(search_history))
             return weather_response
 
-    return render(request, 'main/index.html', {'previous_city': previous_city})
+    return render(request, 'main/index.html', {'previous_city': previous_city, 'search_history': search_history})

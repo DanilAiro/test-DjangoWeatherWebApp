@@ -64,10 +64,25 @@
                         <p>Минимальная за день: <strong>{{min_today}}°C</strong></p>
                         <div class="d-flex flex-row align-items-center">
                             <p class="mb-0 me-4"><strong>{{description}}</strong></p>
-                            <i class="fas fa-cloud fa-3x" style="color: #eee;"></i>
                         </div>
                     </div>
                 </div>
+                {% if search_history %}
+                <div class="mt-4">
+                    <h5>История поиска:</h5>
+                    <ul>
+                        {% for city in search_history %}
+                        <li>
+                            <form method="post" action="{% url 'home' %}">
+                                {% csrf_token %}
+                                <input type="hidden" name="txt" value="{{ city }}">
+                                <button type="submit" class="btn btn-link p-0">{{ city }}</button>
+                            </form>
+                        </li>
+                        {% endfor %}
+                    </ul>
+                </div>
+                {% endif %}
             </div>
         </div>
     </div>
