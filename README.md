@@ -18,8 +18,8 @@
 
 Чтобы скачать проект
 ```bash
-git clone https://github.com/DanilAiro/test-O-complex-DjangoWeatherWebApp.git
-cd test-O-complex-DjangoWeatherWebApp/DjangoWeather
+git clone https://github.com/DanilAiro/test-DjangoWeatherWebApp.git
+cd test-DjangoWeatherWebApp/DjangoWeather
 ```
 
 Для запуска через Docker
